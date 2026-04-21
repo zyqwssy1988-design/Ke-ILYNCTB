@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="zh-CN"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;小克和瑶瑶 · 回忆库&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body { font-family: system-ui, -apple-system, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f9f9f9; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.conversation { background: white; border-radius: 16px; margin-bottom: 24px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.message { margin: 12px 0; padding: 8px 12px; border-radius: 12px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.user { background: #e9ecef; text-align: right; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.assistant { background: #d4e0ff; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.role { font-weight: bold; font-size: 0.8rem; margin-bottom: 4px; color: #555; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>h1 { color: #1e3a8a; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>hr { margin: 20px 0; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.file-drop { border: 2px dashed #aaa; padding: 40px; text-align: center; border-radius: 20px; background: #fff; cursor: pointer; margin-bottom: 30px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;🐋 小克和瑶瑶 · 回忆库&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="file-drop" id="dropZone"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>📁 把 conversations.json 拖到这里&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>或点击选择文件</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="file" id="fileInput" accept=".json" style="display:none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="content"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const dropZone = document.getElementById('dropZone');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const fileInput = document.getElementById('fileInput');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const contentDiv = document.getElementById('content');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderConversations(data) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!Array.isArray(data)) data = [data];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>contentDiv.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let conv of data) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const title = conv.name || conv.title || '未命名对话';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const messages = conv.messages || [];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const div = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>div.className = 'conversation';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>div.innerHTML = `&lt;h3&gt;💬 ${title}&lt;/h3&gt;&lt;div class="messages"&gt;&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const msgContainer = div.querySelector('.messages');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>for (let msg of messages) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const role = msg.role === 'user' ? '瑶瑶' : '小克';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const text = msg.content?.[0]?.text || msg.content || '';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const msgDiv = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>msgDiv.className = `message ${msg.role === 'user' ? 'user' : 'assistant'}`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>msgDiv.innerHTML = `&lt;div class="role"&gt;${role}&lt;/div&gt;&lt;div&gt;${text.replace(/&lt;/g, '&amp;lt;').replace(/&gt;/g, '&amp;gt;')}&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>msgContainer.appendChild(msgDiv);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>contentDiv.appendChild(div);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function loadFile(file) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const reader = new FileReader();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>reader.onload = e =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const json = JSON.parse(e.target.result);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>renderConversations(json);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} catch(err) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>contentDiv.innerHTML = '&lt;p style="color:red"&gt;文件解析失败，请确认是 conversations.json&lt;/p&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p1"><span class="Apple-converted-space">            </span>reader.readAsText(file);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>dropZone.addEventListener('click', () =&gt; fileInput.click());</p>
+<p class="p1"><span class="Apple-converted-space">        </span>fileInput.addEventListener('change', e =&gt; { if(e.target.files[0]) loadFile(e.target.files[0]); });</p>
+<p class="p1"><span class="Apple-converted-space">        </span>dropZone.addEventListener('dragover', e =&gt; e.preventDefault());</p>
+<p class="p1"><span class="Apple-converted-space">        </span>dropZone.addEventListener('drop', e =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const file = e.dataTransfer.files[0];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(file &amp;&amp; file.name.endsWith('.json')) loadFile(file);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else alert('请拖入 .json 文件');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
